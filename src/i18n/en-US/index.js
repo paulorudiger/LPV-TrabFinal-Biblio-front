@@ -3,5 +3,9 @@
 
 export default {
   failed: 'Action failed',
-  success: 'Action was successful'
+  success: 'Action was successful',
+  botoes:{
+    inserir: 'Insert',
+    deletar: 'Delete'
+  }
 }

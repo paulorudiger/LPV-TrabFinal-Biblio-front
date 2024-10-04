@@ -1,18 +1,29 @@
 const routes = [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
-    ]
+      // se der tempo validar para mudar o indexprincipal
+      // ver metodo de beforeenter dentro do json path:
+      // validar com pinia
+      { path: "", component: () => import("pages/IndexPage.vue") },
+      { path: "estilos", component: () => import("pages/estilosPage.vue") },
+      { path: "clubes", component: () => import("pages/clubesPage.vue") },
+    ],
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
+  // {
+  //   // path: '/:catchAll(.*)*',
+  //   path: "/teste",
+  //   component: () => import("pages/ErrorNotFound.vue"),
+  // },
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
-]
+    path: "/estilos",
+    component: () => import("pages/estilosPage.vue"),
+  },
+  {
+    path: "/clubes",
+    component: () => import("pages/clubesPage.vue"),
+  },
+];
 
-export default routes
+export default routes;
