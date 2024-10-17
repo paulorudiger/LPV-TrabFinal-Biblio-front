@@ -18,33 +18,32 @@
         </q-toolbar-title>
 
         <!-- Alinha o avatar à direita -->
-        <q-avatar size="60px" v-if="true">
+        <q-avatar size="60px" v-if="usuarioStore.usuarioLogado">
           <img src="..\assets\images\not-logged-in-1-64.png">
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
-                <q-item-section>New tab</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>New incognito tab</q-item-section>
+                <q-item-section @click="navigate()">Meu perfil</q-item-section>
               </q-item>
               <q-separator />
               <q-item clickable v-close-popup>
-                <q-item-section>Recent tabs</q-item-section>
+                <q-item-section>Minhas reservas</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>History</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>Downloads</q-item-section>
+              <q-separator />
+              <q-item clickable v-close-popup v-if="usuarioStore.ehProfessor">
+                <q-item-section>Cadastrar Livro</q-item-section>
               </q-item>
               <q-separator />
               <q-item clickable v-close-popup>
-                <q-item-section>Settings</q-item-section>
+                <q-item-section>Dashboard</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-close-popup v-if="usuarioStore.ehProfessor">
+                <q-item-section>Gerenciar reservas</q-item-section>
               </q-item>
               <q-separator />
               <q-item clickable v-close-popup>
-                <q-item-section>Help &amp; Feedback</q-item-section>
+                <q-item-section>Sair</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -55,6 +54,9 @@
     </q-header>
 
     <q-page-container>
+
+
+
       <router-view />
     </q-page-container>
 
@@ -64,11 +66,19 @@
 <script setup>
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import { useUsuarioStore } from "src/stores/usuario";
 
 defineOptions({
-  name: 'MainLayout'
-})
+  name: 'MainLayout',
+  methods: {
+    navigate() {
+      console.log('disparou navegação pelo scrit')
+      this.$router.push("/meuperfil")
+    }
+  }
+});
 
-
+// Criar instância da store
+const usuarioStore = useUsuarioStore();
 
 </script>

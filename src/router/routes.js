@@ -24,6 +24,10 @@ const routes = [
     path: "/clubes",
     component: () => import("pages/clubesPage.vue"),
   },
+  {
+    path: "/meuperfil",
+    component: () => import("pages/MeuPerfil.vue"),
+  },
 ];
 
 export default routes;

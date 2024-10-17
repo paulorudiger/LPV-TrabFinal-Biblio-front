@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import Usuario from "../services/usuario";
 
-export const useUsuaruiStore = defineStore("usuario", {
+export const useUsuarioStore = defineStore("usuario", {
   state: () => ({
     usuario: [],
-    usuarioLogado: false,
+    usuarioLogado: true,
+    ehProfessor: true,
   }),
   actions: {
     async getUsuario() {

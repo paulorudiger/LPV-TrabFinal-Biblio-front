@@ -2,7 +2,7 @@
   "name": "npv-projeto-biblio",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "productName": "BookHub",
   "author": "paulorudiger <paulo.e.rudiger@gmail.com>",
   "private": true,
   "scripts": {

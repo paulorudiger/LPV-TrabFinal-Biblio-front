@@ -9,7 +9,7 @@
             </div>
         </div>
     </q-page> -->
-  <q-btn to="home/clubes">CLUBES</q-btn>
+  <q-btn to="/clubes">CLUBES</q-btn>
   <q-btn @click="navigate()">ESTILOS</q-btn>
 </template>
 
@@ -25,7 +25,7 @@ defineOptions({
     ...mapActions(useBandasStore, ['getBandas']),
     navigate() {
       console.log('disparou navegação pelo scrit')
-      this.$router.push("home/estilos")
+      this.$router.push("/estilos")
     }
   }
 });
