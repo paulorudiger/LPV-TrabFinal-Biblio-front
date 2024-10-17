@@ -23,11 +23,11 @@
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
-                <q-item-section @click="navigate()">Meu perfil</q-item-section>
+                <q-item-section @click="navigateToPerfil()">Meu perfil</q-item-section>
               </q-item>
               <q-separator />
               <q-item clickable v-close-popup>
-                <q-item-section>Minhas reservas</q-item-section>
+                <q-item-section @click="navigateToReservas()">Minhas reservas</q-item-section>
               </q-item>
               <q-separator />
               <q-item clickable v-close-popup v-if="usuarioStore.ehProfessor">
@@ -71,9 +71,13 @@ import { useUsuarioStore } from "src/stores/usuario";
 defineOptions({
   name: 'MainLayout',
   methods: {
-    navigate() {
+    navigateToPerfil() {
       console.log('disparou navegação pelo scrit')
       this.$router.push("/meuperfil")
+    },
+    navigateToReservas() {
+      console.log('disparou navegação pelo scrit')
+      this.$router.push("/paginainicial")
     }
   }
 });

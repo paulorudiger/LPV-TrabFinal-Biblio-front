@@ -4,7 +4,7 @@ import Usuario from "../services/usuario";
 export const useUsuarioStore = defineStore("usuario", {
   state: () => ({
     usuario: [],
-    usuarioLogado: true,
+    usuarioLogado: false,
     ehProfessor: true,
   }),
   actions: {
