@@ -4,26 +4,35 @@
             <q-avatar size="80px" class="q-mb-md">
                 <img src="..\assets\images\not-logged-in-1-64.png">
             </q-avatar>
-            <div style="width: 300px;  text-align: center; display: block; align-self: center   ;">
+            <div style="width: 300px; text-align: center; margin: 0 auto;"> <!-- Centralização da div -->
                 <b>Fazer login</b>
                 <q-form @submit.prevent="submitForm">
-                    <q-input filled v-model="username" label="Usuário" required />
-                    <q-input filled v-model="password" type="password" label="Senha" required />
-                    <q-btn type="submit" label="Continuar" color="purple" class="full-width" />
+                    <q-input filled v-model="username" label="Usuário" required style="padding: 3px;" />
+                    <q-input filled v-model="password" type="password" label="Senha" required
+                        style="padding-bottom: 10px;" />
+                    <q-btn rounded type="submit" label="Continuar" color="purple" class="full-width" />
                 </q-form>
             </div>
+            <br />
+            <q-separator inset />
+
             <div class="social-login">
-                <ion-icon name="logo-google"></ion-icon>
                 <i class="fa-brands fa-google"></i>
-                <q-btn flat label="Login with Google" icon="fab fa-google" class="q-mb-xs" />
-                <q-btn flat label="Login with Facebook" icon="fab fa-facebook" />
+                <!-- <q-btn outline label="Login with Google" icon="fab fa-google" class="q-mb-xs" /> -->
+                <q-btn outline rounded label="Login with Google" class="q-mb-xs" />
+                <br />
+                <q-btn outline rounded label="Login with Facebook" />
             </div>
-            <q-btn flat label="Não tem conta? Cadastre-se aqui" class="q-mt-md" />
+            <br />
+            <q-separator inset />
+
+            <q-btn flat label="Não tem conta? Cadastre-se aqui" class="q-mt-md" @click="navigateToCadastroUsuario()" />
         </div>
     </q-page>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -37,6 +46,17 @@ export default {
             console.log(`Usuário: ${this.username}, Senha: ${this.password}`);
         },
     },
+};
+</script>
+
+<script setup>
+import { useRouter } from 'vue-router'; // Importar o roteador // TODO: entender
+
+const router = useRouter(); // Instanciar o roteador
+
+// Método de navegação
+const navigateToCadastroUsuario = () => {
+    router.push('/cadastrousuario');
 };
 </script>
 

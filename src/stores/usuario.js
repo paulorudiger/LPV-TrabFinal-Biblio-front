@@ -6,6 +6,7 @@ export const useUsuarioStore = defineStore("usuario", {
     usuario: [],
     usuarioLogado: false,
     ehProfessor: true,
+    avatarCaminho: "..src/assets/images/not-logged-in-1-64.png", // nao funciona caminho como variav
   }),
   actions: {
     async getUsuario() {

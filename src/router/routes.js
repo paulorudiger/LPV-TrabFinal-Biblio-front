@@ -11,6 +11,10 @@ const routes = [
         meta: { requiresAuth: true },
       },
       { path: "/login", component: () => import("pages/LoginUsuario.vue") },
+      {
+        path: "/cadastrousuario",
+        component: () => import("pages/CadastroUsuario.vue"),
+      },
       { path: "estilos", component: () => import("pages/estilosPage.vue") },
       { path: "clubes", component: () => import("pages/clubesPage.vue") },
       { path: "/meuperfil", component: () => import("pages/MeuPerfil.vue") },

@@ -4,7 +4,7 @@
       <q-toolbar>
         <!-- Alinha a imagem à esquerda -->
         <div>
-          <img src="../assets/images/logoSite.png" height="100px;" />
+          <img src="../assets/images/logoSite.png" height="100px;" @click="navigateToHome()" />
         </div>
 
         <!-- Centraliza o input -->
@@ -19,8 +19,7 @@
 
         <!-- Alinha o avatar à direita -->
         <q-avatar size="60px" v-if="usuarioStore.usuarioLogado">
-          <img src="..\assets\images\not-logged-in-1-64.png">
-          <q-menu>
+          <img :src="usuarioStore.avatarCaminho"> <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
                 <q-item-section @click="navigateToPerfil()">Meu perfil</q-item-section>
@@ -72,12 +71,13 @@ defineOptions({
   name: 'MainLayout',
   methods: {
     navigateToPerfil() {
-      console.log('disparou navegação pelo scrit')
       this.$router.push("/meuperfil")
     },
     navigateToReservas() {
-      console.log('disparou navegação pelo scrit')
-      this.$router.push("/paginainicial")
+      this.$router.push("/paginainicial") // mudar para ir para reservas
+    },
+    navigateToHome() {
+      this.$router.push("/")
     }
   }
 });
