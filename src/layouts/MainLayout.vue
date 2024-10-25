@@ -42,7 +42,7 @@
               </q-item>
               <q-separator />
               <q-item clickable v-close-popup>
-                <q-item-section>Sair</q-item-section>
+                <q-item-section @click="logout()">Sair</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -78,11 +78,21 @@ defineOptions({
     },
     navigateToHome() {
       this.$router.push("/")
-    }
+    },
+    /* logout() {
+      //  usuarioStore.logout();
+      this.$router.push("/login")
+    } */
   }
 });
 
 // Criar instância da store
 const usuarioStore = useUsuarioStore();
+
+//TODO: ajustar logout para atualizar variavel pinia e ir para a rota de login
+const logout = () => {
+  usuarioStore.usuarioLogado = false; // Atualiza a variável na store
+  this.$router.push("/login") // Navega para a página de login
+};
 
 </script>
