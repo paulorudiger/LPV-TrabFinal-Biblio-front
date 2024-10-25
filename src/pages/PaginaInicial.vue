@@ -3,6 +3,8 @@
         <q-card class="my-card">
             <img src="https://cdn.quasar.dev/img/mountains.jpg">
 
+
+            <div id="teste"></div>
             <q-card-section>
                 <div class="text-h6">Our Changing Planet</div>
                 <div class="text-subtitle2">by John Doe</div>
@@ -82,19 +84,4 @@
     </div>
 </template>
 <script setup>
-import { onMounted } from 'vue';
-import { useUsuarioStore } from "src/stores/usuario";
-
-const usuarioStore = useUsuarioStore();
-
-usuarioStore.usuarioLogado
-
-
-onMounted(() => {
-    if (!usuarioStore.usuarioLogado) {
-        router.push("/login");
-    }
-})
-
-
 </script>

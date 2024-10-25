@@ -8,7 +8,7 @@
         </div>
 
         <!-- Centraliza o input -->
-        <q-toolbar-title v-if="true">
+        <q-toolbar-title v-if="usuarioStore.usuarioLogado">
           <q-input rounded outlined label-color="black" color="black" dark bg-color="light-grey" filled v-model="text"
             label="Buscar livros...">
             <template v-slot:prepend>
