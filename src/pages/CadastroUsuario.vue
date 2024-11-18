@@ -10,7 +10,6 @@
                 <q-form @submit.prevent="submitForm">
                     <q-input filled v-model="username" label="Usuário" required style="padding: 3px;" />
                     <q-input filled v-model="name" label="Nome" required style="padding: 3px;" />
-                    <q-input filled v-model="surname" label="Sobrenome" required style="padding: 3px;" />
                     <q-input filled v-model="matricula" label="Matrícula" required style="padding: 3px;" />
                     <q-input filled v-model="email" type="email" label="Email" required style="padding: 3px;" />
                     <q-input filled v-model="password" type="password" label="Senha" required style="padding: 3px;" />
@@ -18,8 +17,7 @@
                         style="padding: 3px;" />
                     <q-btn type="submit" label="Cadastrar" color="purple" class="full-width" rounded />
                     <br />
-                    <q-btn type="submit" label="Cancelar cadastro" color="grey" outline rounded
-                        @click="navigateToLogin()" />
+                    <q-btn to="/login" label="Cancelar cadastro" color="grey" outline rounded @click="cancelar()" />
 
                 </q-form>
             </div>
@@ -28,12 +26,15 @@
 </template>
 
 <script>
+import { useUsuarioStore } from "src/stores/usuario";
+// Criar instância da store
+const usuarioStore = useUsuarioStore();
+
 export default {
     data() {
         return {
             username: '',
             name: '',
-            surname: '',
             matricula: '',
             email: '',
             password: '',
@@ -41,11 +42,63 @@ export default {
         };
     },
     methods: {
-        submitForm() {
-            // Lógica para submissão do formulário
-            console.log(`Usuário: ${this.username}, Nome: ${this.name}, Sobrenome: ${this.surname}, Matrícula: ${this.matricula}, Email: ${this.email}, Senha: ${this.password}, Confirmar Senha: ${this.confirmPassword}`);
-            // Adicione aqui a lógica para enviar os dados para o servidor ou realizar validações
+        async submitForm() {
+            // Validações
+            const errors = [];
+
+            // Validação do Username
+            if (!this.username || this.username.length < 3) {
+                errors.push("O nome de usuário deve ter pelo menos 3 caracteres.");
+            }
+
+            // Validação do Nome
+            if (!this.name || !/^[A-Za-z]+$/.test(this.name)) {
+                errors.push("O nome deve conter apenas letras.");
+            }
+
+            // Validação da Matrícula
+            if (!this.matricula || !/^\d+$/.test(this.matricula) || this.matricula.length < 6) {
+                errors.push("A matrícula deve conter pelo menos 6 dígitos numéricos.");
+            }
+
+            // Validação da Senha
+            const passwordPattern = /^[A-Za-z\d]{5,20}$/;
+            if (!this.password || !passwordPattern.test(this.password)) {
+                errors.push("A senha deve ter entre 5 e 20 caracteres e conter apenas letras e números.");
+            }
+
+            // Validação da Confirmação de Senha
+            if (this.password !== this.confirmPassword) {
+                errors.push("As senhas não correspondem.");
+            }
+
+            // Verifica se existem erros
+            if (errors.length > 0) {
+                console.error("Erros de validação:", errors);
+                alert(errors.join("\n"));
+                return;
+            }
+            debugger;
+            // fazer o getall de todos os IDs de usuario para fazer o controle e enviar o novo ID no post
+            const ids = await usuarioStore.getAllIdsUsuario();
+
+            // Encontra o maior ID e adiciona 1 para obter o novo ID
+            const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
+
+            var json = {
+                //"idusuario": 1,
+                "usuario": this.usuario,
+                "nome": this.nome,
+                "matricula": this.matricula,
+                "email": this.email,
+                "senha": this.senha,
+            }
+
+            // chamar store
+            //  usuarioStore.postCadastroUsuario(json);
+
         },
+
     },
 };
 </script>
@@ -55,9 +108,6 @@ import { useRouter } from 'vue-router'; // Importar o roteador
 
 const router = useRouter(); // Instanciar o roteador
 
-const navigateToLogin = () => {
-    router.push('/login');
-};
 </script>
 
 <style scoped>

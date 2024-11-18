@@ -3,11 +3,11 @@ import Bandas from "src/services/bandas";
 
 export const useBandasStore = defineStore("bandas", {
   state: () => ({
-    bandas: []
+    bandas: [],
   }),
   actions: {
-    async getBandas(){
-        this.bandas = await Bandas.getBandas();
-    }
+    async getBandas() {
+      this.bandas = await Bandas.getBandas();
+    },
   },
 });

@@ -19,7 +19,9 @@
 
         <!-- Alinha o avatar à direita -->
         <q-avatar size="60px" v-if="usuarioStore.usuarioLogado">
+
           <img :src="usuarioStore.avatarCaminho"> <q-menu>
+
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
                 <q-item-section @click="navigateToPerfil()">Meu perfil</q-item-section>
@@ -48,14 +50,8 @@
           </q-menu>
         </q-avatar>
       </q-toolbar>
-
-
     </q-header>
-
     <q-page-container>
-
-
-
       <router-view />
     </q-page-container>
 
@@ -64,8 +60,17 @@
 
 <script setup>
 import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
 import { useUsuarioStore } from "src/stores/usuario";
+// Criar instância da store
+const usuarioStore = useUsuarioStore();
+import { useRouter } from 'vue-router'; // Importar o roteador // TODO: entender
+const router = useRouter(); // Instanciar o roteador
+
+
+function logout() {
+  usuarioStore.sairsistema();
+  router.push("/login");
+}
 
 defineOptions({
   name: 'MainLayout',
@@ -79,20 +84,9 @@ defineOptions({
     navigateToHome() {
       this.$router.push("/")
     },
-    /* logout() {
-      //  usuarioStore.logout();
-      this.$router.push("/login")
-    } */
+
   }
 });
 
-// Criar instância da store
-const usuarioStore = useUsuarioStore();
-
-//TODO: ajustar logout para atualizar variavel pinia e ir para a rota de login
-const logout = () => {
-  usuarioStore.usuarioLogado = false; // Atualiza a variável na store
-  this.$router.push("/login") // Navega para a página de login
-};
 
 </script>

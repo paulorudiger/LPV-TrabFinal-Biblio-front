@@ -50,9 +50,9 @@ export default {
 </script>
 
 <script setup>
-import { useRouter } from 'vue-router'; // Importar o roteador // TODO: entender
+import { useRouter } from 'vue-router';
 
-const router = useRouter(); // Instanciar o roteador
+const router = useRouter();
 
 // Método de navegação
 const navigateToCadastroUsuario = () => {
