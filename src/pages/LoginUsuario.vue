@@ -17,9 +17,9 @@
             <q-separator inset />
 
             <div class="social-login">
-                <q-btn outline rounded label="Login with Google" class="q-mb-xs" />
+                <q-btn outline rounded label="Login with Google" class="q-mb-xs" @click="simularLogin('google')" />
                 <br />
-                <q-btn outline rounded label="Login with Facebook" />
+                <q-btn outline rounded label="Login with Facebook" @click="simularLogin('facebook')" />
             </div>
             <br />
             <q-separator inset />
@@ -42,6 +42,22 @@ const password = ref("");
 const router = useRouter();
 const usuarioStore = useUsuarioStore();
 
+// Função para simular login via redes sociais
+const simularLogin = (redeSocial) => {
+    console.log(`Simulando login via ${redeSocial}`);
+    const usuarioSimulado = { usuario: "paulorudiger", senha: "1" };
+
+    // Simula a autenticação com as credenciais
+    usuarioStore
+        .login(usuarioSimulado)
+        .then(() => {
+            console.log(`Login via ${redeSocial} bem-sucedido`);
+            router.push("/"); // Redireciona para a página inicial
+        })
+        .catch((erro) => {
+            console.error(`Erro ao simular login via ${redeSocial}:`, erro.message);
+        });
+};
 // Função para envio do formulário de login
 const submitForm = async () => {
     try {
