@@ -20,8 +20,9 @@
         <!-- Alinha o avatar à direita -->
         <q-avatar size="60px" v-if="usuarioStore.usuarioLogado">
 
-          <img :src="usuarioStore.avatarCaminho"> <q-menu>
+          <!--  <img src="../usuarioStore.avatarCaminho"> <q-menu> -->
 
+          <img src="../assets/images/not-logged-in-1-64.png"> <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
                 <q-item-section @click="navigateToPerfil()">Meu perfil</q-item-section>
