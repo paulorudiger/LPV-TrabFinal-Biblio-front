@@ -37,7 +37,7 @@ export default class Usuario {
   }
 
   static async getUsuarioFoto(id) {
-    debugger;
+    // debugger;
     // TODO: resolver foto
     return new Promise((res, rej) => {
       api
@@ -93,6 +93,21 @@ export default class Usuario {
         .catch((err) => {
           console.error(`Erro ao buscar dados do usuário com ID ${id}:`, err);
           rej(err.response || { message: "Erro no servidor" });
+        });
+    });
+  }
+
+  static async excluirUsuario(id) {
+    return new Promise((res, rej) => {
+      api
+        .delete(`/tbUsuario/${id}`) // Envia a requisição DELETE
+        .then((response) => {
+          console.log("Usuário excluído com sucesso:", response.data);
+          res(response.data);
+        })
+        .catch((err) => {
+          console.error(`Erro ao excluir o usuário com ID ${id}:`, err);
+          rej(err.response || { message: "Erro ao excluir o usuário" });
         });
     });
   }

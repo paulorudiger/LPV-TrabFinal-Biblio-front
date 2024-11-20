@@ -18,7 +18,7 @@
                         style="padding: 3px;" />
                     <q-btn type="submit" label="Atualizar dados" color="purple" class="full-width q-mt-sm" rounded />
                     <q-btn type="button" label="Excluir perfil" color="red" outline class="full-width q-mt-sm" rounded
-                        @click="excluirPerfil" />
+                        @click="confirmarExclusao" />
                 </q-form>
             </div>
         </div>
@@ -29,6 +29,7 @@
 import { ref, onMounted } from "vue";
 import { useUsuarioStore } from "../stores/usuario";
 import { useRouter } from "vue-router";
+import { Dialog } from "quasar";
 
 // Store e roteador
 const usuarioStore = useUsuarioStore();
@@ -66,13 +67,40 @@ const atualizarDados = () => {
     alert("Dados atualizados com sucesso!");
 };
 
+// Função para abrir a janela de confirmação antes de excluir o perfil
+const confirmarExclusao = () => {
+    Dialog.create({
+        title: "Meus dados",
+        message: "Você tem certeza que deseja excluir o seu perfil? Esta ação não poderá ser desfeita.",
+        cancel: true,
+        persistent: true,
+        ok: {
+            label: "Sim",
+            color: "green",
+        },
+        cancel: {
+            label: "Não",
+            color: "red",
+        },
+    })
+        .onOk(() => {
+            excluirPerfil();
+        })
+        .onCancel(() => {
+            console.log("Usuário cancelou a exclusão.");
+        });
+};
+
 // Função para excluir o perfil
-const excluirPerfil = () => {
-    const confirmacao = confirm("Tem certeza que deseja excluir o perfil?");
-    if (confirmacao) {
-        console.log("Perfil excluído");
+// TODO: continuar função de exclusao de perfil
+const excluirPerfil = async () => {
+    try {
+        await usuarioStore.excluirUsuarioLogado(); // Chama a ação da store
         router.push("/login"); // Redireciona para a página de login
-        usuarioStore.sairsistema();
+        console.log("Perfil excluído e redirecionado para login.");
+    } catch (erro) {
+        console.error("Erro ao excluir o perfil:", erro.message);
+        alert("Ocorreu um erro ao excluir o perfil. Tente novamente.");
     }
 };
 </script>
