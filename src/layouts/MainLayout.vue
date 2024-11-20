@@ -19,10 +19,9 @@
 
         <!-- Alinha o avatar à direita -->
         <q-avatar size="60px" v-if="usuarioStore.usuarioLogado">
-
-          <!--  <img src="../usuarioStore.avatarCaminho"> <q-menu> -->
-
-          <img src="../assets/images/not-logged-in-1-64.png"> <q-menu>
+          <!-- Carrega a imagem do avatar via store -->
+          <img :src="usuarioStore.avatarCaminho" />
+          <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
                 <q-item-section @click="navigateToPerfil()">Meu perfil</q-item-section>
@@ -55,39 +54,35 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useUsuarioStore } from "src/stores/usuario";
+import { useRouter } from "vue-router";
+
 // Criar instância da store
 const usuarioStore = useUsuarioStore();
-import { useRouter } from 'vue-router'; // Importar o roteador // TODO: entender
-const router = useRouter(); // Instanciar o roteador
+const router = useRouter();
 
-
+// Funções de navegação
 function logout() {
   usuarioStore.sairsistema();
   router.push("/login");
 }
 
 defineOptions({
-  name: 'MainLayout',
+  name: "MainLayout",
   methods: {
     navigateToPerfil() {
-      this.$router.push("/meuperfil")
+      this.$router.push("/meuperfil");
     },
     navigateToReservas() {
-      this.$router.push("/paginainicial") // mudar para ir para reservas
+      this.$router.push("/paginainicial"); // mudar para ir para reservas
     },
     navigateToHome() {
-      this.$router.push("/")
+      this.$router.push("/");
     },
-
-  }
+  },
 });
-
-
 </script>

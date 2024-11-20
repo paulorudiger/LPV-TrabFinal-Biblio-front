@@ -2,9 +2,9 @@
     <q-page class="flex flex-center">
         <div class="login-container">
             <q-avatar size="80px" class="q-mb-md">
-                <img src="..\assets\images\not-logged-in-1-64.png">
+                <img src="../assets/images/not-logged-in-1-64.png" />
             </q-avatar>
-            <div style="width: 300px; text-align: center; margin: 0 auto;"> <!-- Centralização da div -->
+            <div style="width: 300px; text-align: center; margin: 0 auto;">
                 <b>Fazer login</b>
                 <q-form @submit.prevent="submitForm">
                     <q-input filled v-model="username" label="Usuário" required style="padding: 3px;" />
@@ -17,8 +17,6 @@
             <q-separator inset />
 
             <div class="social-login">
-                <i class="fa-brands fa-google"></i>
-                <!-- <q-btn outline label="Login with Google" icon="fab fa-google" class="q-mb-xs" /> -->
                 <q-btn outline rounded label="Login with Google" class="q-mb-xs" />
                 <br />
                 <q-btn outline rounded label="Login with Facebook" />
@@ -31,32 +29,36 @@
     </q-page>
 </template>
 
-<script>
-
-export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-        };
-    },
-    methods: {
-        submitForm() {
-            // Lógica para submissão do formulário
-            console.log(`Usuário: ${this.username}, Senha: ${this.password}`);
-        },
-    },
-};
-</script>
-
 <script setup>
-import { useRouter } from 'vue-router';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useUsuarioStore } from "../stores/usuario";
 
+// Referências para os campos do formulário
+const username = ref("");
+const password = ref("");
+
+// Instâncias do roteador e da store
 const router = useRouter();
+const usuarioStore = useUsuarioStore();
 
-// Método de navegação
+// Função para envio do formulário de login
+const submitForm = async () => {
+    try {
+        console.log("Tentativa de login:", username.value, password.value);
+        // Autentica o usuário
+        await usuarioStore.login({ usuario: username.value, senha: password.value });
+        // Redireciona para a página inicial após login bem-sucedido
+        router.push("/");
+    } catch (erro) {
+        console.error("Erro ao fazer login:", erro.message);
+        alert(erro.message); // Exibe uma mensagem de erro ao usuário
+    }
+};
+
+// Navegação para a página de cadastro
 const navigateToCadastroUsuario = () => {
-    router.push('/cadastrousuario');
+    router.push("/cadastrousuario");
 };
 </script>
 
