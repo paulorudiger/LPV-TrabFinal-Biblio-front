@@ -37,6 +37,8 @@ export default class Usuario {
   }
 
   static async getUsuarioFoto(id) {
+    debugger;
+    // TODO: resolver foto
     return new Promise((res, rej) => {
       api
         .get(`/tbUsuario/${id}`) // Busca o usuário pelo ID
@@ -77,6 +79,20 @@ export default class Usuario {
         .catch((err) => {
           console.log(err);
           rej(err.response);
+        });
+    });
+  }
+
+  static async getDadosUsuario(id) {
+    return new Promise((res, rej) => {
+      api
+        .get(`/tbUsuario/${id}`) // Busca o usuário pelo ID
+        .then((response) => {
+          res(response.data); // Retorna os dados completos do usuário
+        })
+        .catch((err) => {
+          console.error(`Erro ao buscar dados do usuário com ID ${id}:`, err);
+          rej(err.response || { message: "Erro no servidor" });
         });
     });
   }
