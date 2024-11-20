@@ -18,6 +18,11 @@ const routes = [
       { path: "estilos", component: () => import("pages/estilosPage.vue") },
       { path: "clubes", component: () => import("pages/clubesPage.vue") },
       { path: "/meuperfil", component: () => import("pages/MeuPerfil.vue") },
+      { path: "/cadlivro", component: () => import("pages/CadastroLivro.vue") },
+      {
+        path: "/manterreserva",
+        component: () => import("pages/ManterReserva.vue"),
+      },
     ],
   },
   // {

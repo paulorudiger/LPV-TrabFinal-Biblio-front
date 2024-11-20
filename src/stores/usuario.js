@@ -6,7 +6,8 @@ export const useUsuarioStore = defineStore("usuario", {
     usuario: [],
     usuarioLogado: false,
     idusuarioLogado: null, // ID do usuário logado
-    ehProfessor: false,
+    // TODO: ajustar ehProfessor
+    ehProfessor: true,
     avatarCaminho: "assets/images/not-logged-in-1-64.png", // Caminho padrão do avatar
   }),
   actions: {

@@ -31,7 +31,7 @@
                 <q-item-section @click="navigateToReservas()">Minhas reservas</q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable v-close-popup v-if="usuarioStore.ehProfessor">
+              <q-item clickable v-close-popup @click="navigateToCadLivro()" v-if="usuarioStore.ehProfessor">
                 <q-item-section>Cadastrar Livro</q-item-section>
               </q-item>
               <q-separator />
@@ -39,7 +39,7 @@
                 <q-item-section>Dashboard</q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable v-close-popup v-if="usuarioStore.ehProfessor">
+              <q-item clickable v-close-popup @click="navigateToManterReserva()" v-if="usuarioStore.ehProfessor">
                 <q-item-section>Gerenciar reservas</q-item-section>
               </q-item>
               <q-separator />
@@ -78,11 +78,17 @@ defineOptions({
       this.$router.push("/meuperfil");
     },
     navigateToReservas() {
-      this.$router.push("/paginainicial"); // mudar para ir para reservas
+      this.$router.push("/paginainicial"); // TODO: mudar para ir para reservas
+    },
+    navigateToCadLivro() {
+      this.$router.push("/cadlivro"); // TODO: mudar para ir para reservas
     },
     navigateToHome() {
       this.$router.push("/");
     },
+    navigateToManterReserva() {
+      this.$router.push("/manterreserva");
+    }
   },
 });
 </script>
