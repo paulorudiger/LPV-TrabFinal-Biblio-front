@@ -79,7 +79,7 @@ export default {
 
                 // Criar objeto do novo usuário
                 const json = {
-                    idusuario: newId,
+                    id: newId,
                     usuario: this.usuario,
                     nome: this.nome,
                     matricula: this.matricula,

@@ -13,11 +13,10 @@ export const useUsuarioStore = defineStore("usuario", {
     async carregarDadosUsuario() {
       try {
         if (this.idusuarioLogado) {
+          //  debugger;
           const dados = await Usuario.getDadosUsuario(this.idusuarioLogado);
           this.usuario = dados;
           console.log("Dados do usuário carregados:", this.usuario);
-        } else {
-          console.error("ID do usuário logado não encontrado.");
         }
       } catch (erro) {
         console.error("Erro ao carregar os dados do usuário:", erro);
@@ -27,7 +26,7 @@ export const useUsuarioStore = defineStore("usuario", {
       try {
         const usuario = await Usuario.login(credentials); // Passa o nome de usuário e senha
         this.usuario = usuario;
-        this.idusuarioLogado = usuario.idusuario; // Salva o ID do usuário logado
+        this.idusuarioLogado = usuario.id; // Salva o ID do usuário logado
         this.usuarioLogado = true;
         this.ehProfessor = usuario.ehProfessor || false;
         console.log("Login bem-sucedido, ID do usuário:", this.idusuarioLogado);

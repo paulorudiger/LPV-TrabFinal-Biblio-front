@@ -57,13 +57,36 @@ onMounted(async () => {
 });
 
 // Função para atualizar os dados do perfil
-const atualizarDados = () => {
-    if (form.value.senha !== form.value.confirmarSenha) {
-        alert("As senhas não conferem!");
-        return;
-    }
+const atualizarDados = async () => {
+    try {
+        // Validações
+        if (form.value.senha !== form.value.confirmarSenha) {
+            throw new Error("As senhas não conferem!");
+        }
 
-    alert("Dados atualizados com sucesso!");
+        // Captura o idusuario logado
+        const idusuario = usuarioStore.idusuarioLogado;
+        if (!idusuario) {
+            throw new Error("Usuário não encontrado. Faça login novamente.");
+        }
+
+        // Prepara os dados para envio
+        const dadosAtualizados = {
+            usuario: form.value.usuario,
+            nome: form.value.nome,
+            matricula: form.value.matricula,
+            email: form.value.email,
+            senha: form.value.senha, // Apenas se a senha for alterada
+        };
+
+        // Chama o serviço para atualizar os dados
+        // await Usuario.atualizarUsuario(idusuario, dadosAtualizados);
+
+        alert("Dados atualizados com sucesso!");
+    } catch (erro) {
+        console.error("Erro ao atualizar os dados do usuário:", erro.message);
+        alert(erro.message || "Ocorreu um erro ao atualizar os dados.");
+    }
 };
 
 // Função para abrir a janela de confirmação antes de excluir o perfil

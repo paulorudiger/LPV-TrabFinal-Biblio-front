@@ -55,7 +55,7 @@ export default class Usuario {
         .get("/tbUsuario")
         .then((response) => {
           // Extrai apenas os IDs de cada usuário
-          const ids = response.data.map((usuario) => usuario.idusuario);
+          const ids = response.data.map((usuario) => usuario.id);
           //    console.log("IDs:", ids);
           res(ids);
         })
@@ -91,6 +91,25 @@ export default class Usuario {
         .catch((err) => {
           console.error(`Erro ao excluir o usuário com ID ${id}:`, err);
           rej(err.response || { message: "Erro ao excluir o usuário" });
+        });
+    });
+  }
+
+  static async atualizarUsuario(idusuario, dados) {
+    return new Promise((res, rej) => {
+      api
+        .put(`/tbUsuario/${idusuario}`, dados) // Atualiza os dados no servidor
+        .then((response) => {
+          console.log("Dados atualizados:", response.data);
+          res(response.data);
+        })
+        .catch((err) => {
+          console.error("Erro ao atualizar os dados:", err);
+          rej(
+            err.response || {
+              message: "Erro ao atualizar os dados do usuário.",
+            }
+          );
         });
     });
   }

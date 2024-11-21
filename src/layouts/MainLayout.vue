@@ -11,10 +11,8 @@
         <q-toolbar-title v-if="usuarioStore.usuarioLogado">
           <!-- TODO: corrigir pesquisa livros -->
           <q-input rounded outlined label-color="black" color="black" dark bg-color="light-grey" filled
-            v-model="searchQuery" @keyup.enter="searchBooks" label="Buscar livros...">
-            <template v-slot:prepend>
-              <q-icon name="search" @click="searchBooks" />
-            </template>
+            v-model="searchQuery" @keyup.enter="pesquisarLivros" label="Buscar livros...">
+
           </q-input>
 
         </q-toolbar-title>
@@ -69,7 +67,7 @@ const usuarioStore = useUsuarioStore();
 const router = useRouter();
 const searchQuery = ref("");
 
-const searchBooks = () => {
+const pesquisarLivros = () => {
   if (searchQuery.value.trim()) {
     router.push({ path: "/resultados", query: { query: searchQuery.value } });
   }

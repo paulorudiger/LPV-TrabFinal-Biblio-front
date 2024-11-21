@@ -4,8 +4,10 @@
             <div class="row">
                 <!-- Imagem do Livro -->
                 <div class="col-4">
-                    <q-img :src="livro.caminhoImagem" alt="Capa do Livro" ratio="4/6" />
+                    <q-img :src="livro.caminhoImagem" ratio="4/6" />
                 </div>
+
+
                 <!-- Informações do Livro -->
                 <div class="col-8">
                     <h1>{{ livro.titulo }}</h1>
@@ -21,7 +23,6 @@
         </div>
     </q-page>
 </template>
-
 <script>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
@@ -33,12 +34,29 @@ export default {
         const livro = ref({}); // Armazena os dados do livro
         const carregando = ref(true); // Indica se os dados estão carregando
 
+        // Corrige o caminho da imagem para ser absoluto
+        const ajustarCaminhoImagem = (caminhoImagem) => {
+            if (caminhoImagem.startsWith("src/")) {
+                return `/${caminhoImagem}`;
+            }
+            return caminhoImagem;
+        };
+
         // Carrega os detalhes do livro ao montar o componente
         onMounted(async () => {
             try {
                 const id = route.params.id; // Captura o ID da URL
                 const dadosLivro = await Livro.getLivroPorId(id); // Busca os detalhes do livro
+
+                // Ajusta o caminho da imagem
+                var caminhoImagemAjustado = ajustarCaminhoImagem(dadosLivro.caminhoImagem);
                 livro.value = dadosLivro;
+                livro.value.caminhoImagem = caminhoImagemAjustado;
+                console.log("Caminho corrigido:", dadosLivro.caminhoImagem);
+                console.log(" livro.value.caminho", livro.value.caminhoImagem);
+                console.log("Livro.value", livro.value);
+
+
             } catch (erro) {
                 console.error("Erro ao carregar os detalhes do livro:", erro);
             } finally {
@@ -53,6 +71,7 @@ export default {
     },
 };
 </script>
+
 
 <style scoped>
 .detalhes-container {

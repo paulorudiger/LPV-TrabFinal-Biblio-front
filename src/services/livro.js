@@ -32,4 +32,18 @@ export default class Livro {
         });
     });
   }
+  static async searchBooks(query) {
+    return new Promise((res, rej) => {
+      api
+        .get("/tbLivro", { params: { q: query } }) // O parâmetro `q` permite busca parcial no JSON Server
+        .then((response) => {
+          console.log("Livros encontrados:", response.data);
+          res(response.data);
+        })
+        .catch((err) => {
+          console.error("Erro ao buscar livros:", err);
+          rej(err.response);
+        });
+    });
+  }
 }

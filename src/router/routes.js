@@ -33,8 +33,9 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "/resultados", // Nova rota para os resultados da pesquisa
+        path: "/resultados",
         component: () => import("pages/ResultadosPesquisa.vue"),
+        meta: { requiresAuth: true },
       },
     ],
   },
