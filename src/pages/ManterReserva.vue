@@ -2,7 +2,6 @@
     <q-page class="flex flex-center">
         <div class="reservas-container">
             <div class="filtro-container">
-                <!-- Campo para inserir a matrícula -->
                 <q-input outlined rounded v-model="matricula" label="Matrícula do aluno" dense class="q-mb-md"
                     placeholder="Insira a matrícula">
                     <template v-slot:prepend>
@@ -10,40 +9,35 @@
                     </template>
                 </q-input>
 
-                <!-- Filtro para devolvidos ou pendentes -->
                 <q-toggle v-model="mostrarDevolvidos" label="Mostrar devolvidos" left-label dense />
-                <!-- Botão para adicionar uma nova reserva -->
                 <q-btn color="purple" rounded icon="add" dense @click="abrirJanelaReserva" />
             </div>
 
-            <!-- Lista de Reservas -->
             <div v-for="reserva in reservasFiltradas" :key="reserva.id" class="reserva-item">
                 <q-card flat bordered>
                     <q-card-section>
                         <div class="reserva-detalhes">
-                            <!-- Imagem do livro -->
                             <q-img :src="reserva.capa" class="reserva-capa" />
-                            <!-- Informações da reserva -->
                             <div class="reserva-informacoes">
                                 <h5>{{ reserva.titulo }}</h5>
                                 <p>Matrícula do aluno: {{ reserva.matricula }}</p>
                                 <p>Data de reserva: {{ reserva.dataReserva }}</p>
                                 <p>Data de devolução: {{ reserva.dataDevolucao || "Pendente" }}</p>
                             </div>
+
                             <!-- Indicador de status -->
                             <q-chip color="green" v-if="reserva.status === 'Devolvido'" class="status-chip">
                                 Devolvido
                             </q-chip>
-                            <q-chip color="red" v-else class="status-chip">
+                            <q-btn color="red" v-else class="status-chip" @click="realizarDevolucao(reserva)">
                                 Pendente
-                            </q-chip>
+                            </q-btn>
                         </div>
                     </q-card-section>
                 </q-card>
             </div>
         </div>
 
-        <!-- Janela Modal para nova reserva -->
         <q-dialog v-model="janelaAberta">
             <q-card style="min-width: 400px;">
                 <q-card-section>
@@ -67,8 +61,10 @@
 import { ref, computed, onMounted } from "vue";
 import { Dialog } from "quasar";
 import { api } from "../boot/axios";
+import { useUsuarioStore } from "src/stores/reserva";
+// Criar instância da store
+const usuarioStore = useUsuarioStore();
 
-// Estados
 const matricula = ref("");
 const reservas = ref([]);
 const mostrarDevolvidos = ref(false);
@@ -97,8 +93,6 @@ const carregarReservas = async () => {
         const responseLivros = await api.get("/tbLivro");
 
         const livros = responseLivros.data;
-        //debugger;
-        //console.log(responseLivros);
         reservas.value = responseReservas.data.map((reserva) => {
             const livro = livros.find((livro) => Number(livro.id) === Number(reserva.idLivro));
             return {
@@ -107,12 +101,35 @@ const carregarReservas = async () => {
                 capa: livro?.caminhoImagem || "src/assets/images/tbLivro/capa-generica.jpeg",
             };
         });
-
     } catch (erro) {
         console.error("Erro ao carregar reservas:", erro);
         Dialog.create({
             title: "Erro",
             message: "Não foi possível carregar as reservas.",
+            ok: { label: "Ok", color: "red" },
+        });
+    }
+};
+
+// Função para realizar devolução
+const realizarDevolucao = async (reserva) => {
+    try {
+        const dataAtual = new Date().toISOString().split("T")[0];
+        await api.patch(`/tbReservas/${reserva.id}`, {
+            dataDevolucao: dataAtual,
+            status: "Devolvido",
+        });
+        Dialog.create({
+            title: "Sucesso",
+            message: "Livro devolvido com sucesso!",
+            ok: { label: "Ok", color: "green" },
+        });
+        carregarReservas();
+    } catch (erro) {
+        console.error("Erro ao realizar devolução:", erro);
+        Dialog.create({
+            title: "Erro",
+            message: "Não foi possível realizar a devolução.",
             ok: { label: "Ok", color: "red" },
         });
     }
@@ -126,6 +143,10 @@ const abrirJanelaReserva = () => {
 // Função para cadastrar nova reserva
 const cadastrarReserva = async () => {
     try {
+        const ids = await usuarioStore.getAllIdsReserva();
+        const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
+        novaReserva.value.id = newId;
+
         await api.post("/tbReservas", novaReserva.value);
         Dialog.create({
             title: "Sucesso",
