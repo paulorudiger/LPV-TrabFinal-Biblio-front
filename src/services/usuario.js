@@ -56,7 +56,7 @@ export default class Usuario {
         .then((response) => {
           // Extrai apenas os IDs de cada usuário
           const ids = response.data.map((usuario) => usuario.idusuario);
-          console.log("IDs:", ids);
+          //    console.log("IDs:", ids);
           res(ids);
         })
         .catch((err) => {

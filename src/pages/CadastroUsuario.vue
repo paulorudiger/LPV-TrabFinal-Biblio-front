@@ -8,11 +8,11 @@
                 <!-- Centralização da div -->
                 <b>Cadastrar Usuário</b>
                 <q-form @submit.prevent="submitForm">
-                    <q-input filled v-model="username" label="Usuário" required style="padding: 3px;" />
-                    <q-input filled v-model="name" label="Nome" required style="padding: 3px;" />
+                    <q-input filled v-model="usuario" label="Usuário" required style="padding: 3px;" />
+                    <q-input filled v-model="nome" label="Nome" required style="padding: 3px;" />
                     <q-input filled v-model="matricula" label="Matrícula" required style="padding: 3px;" />
                     <q-input filled v-model="email" type="email" label="Email" required style="padding: 3px;" />
-                    <q-input filled v-model="password" type="password" label="Senha" required style="padding: 3px;" />
+                    <q-input filled v-model="senha" type="password" label="Senha" required style="padding: 3px;" />
                     <q-input filled v-model="confirmPassword" type="password" label="Confirma a senha" required
                         style="padding: 3px;" />
                     <q-btn type="submit" label="Cadastrar" color="purple" class="full-width" rounded />
@@ -33,73 +33,75 @@ const usuarioStore = useUsuarioStore();
 export default {
     data() {
         return {
-            username: '',
-            name: '',
+            usuario: '',
+            nome: '',
             matricula: '',
             email: '',
-            password: '',
+            senha: '',
             confirmPassword: '',
         };
     },
     methods: {
         async submitForm() {
-            // Validações
-            const errors = [];
+            try {
+                // Validações
+                const errors = [];
 
-            // Validação do Username
-            if (!this.username || this.username.length < 3) {
-                errors.push("O nome de usuário deve ter pelo menos 3 caracteres.");
+                // Validação do Username
+                if (!this.usuario || this.usuario.length < 3) {
+                    errors.push("O nome de usuário deve ter pelo menos 3 caracteres.");
+                }
+
+                // Validação da Matrícula
+                if (!this.matricula || !/^\d+$/.test(this.matricula) || this.matricula.length < 6) {
+                    errors.push("A matrícula deve conter pelo menos 6 dígitos numéricos.");
+                }
+
+                // Validação da Senha
+                const passwordPattern = /^[A-Za-z\d]{5,20}$/;
+                if (!this.senha || !passwordPattern.test(this.senha)) {
+                    errors.push("A senha deve ter entre 5 e 20 caracteres e conter apenas letras e números.");
+                }
+
+                // Validação da Confirmação de Senha
+                if (this.senha !== this.confirmPassword) {
+                    errors.push("As senhas não correspondem.");
+                }
+
+                // Lança os erros de validação
+                if (errors.length > 0) {
+                    throw new Error(errors.join("\n"));
+                }
+
+                // Obter todos os IDs de usuário para controle e criar um novo ID
+                const ids = await usuarioStore.getAllIdsUsuario();
+                const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
+
+                // Criar objeto do novo usuário
+                const json = {
+                    idusuario: newId,
+                    usuario: this.usuario,
+                    nome: this.nome,
+                    matricula: this.matricula,
+                    email: this.email,
+                    senha: this.senha,
+                    "ehProfessor": false,
+                };
+
+                // Chamar a store para cadastrar o novo usuário
+                await usuarioStore.postCadastroUsuario(json);
+
+                // Redirecionar para a página de login
+                this.$router.push("/login");
+                alert("Cadastro realizado com sucesso! Você será redirecionado para a página de login.");
+            } catch (erro) {
+                // Captura e exibe os erros de validação ou outros erros
+                console.error("Erro ao cadastrar usuário:", erro.message);
+                alert(erro.message);
             }
-
-            // Validação do Nome
-            if (!this.name || !/^[A-Za-z]+$/.test(this.name)) {
-                errors.push("O nome deve conter apenas letras.");
-            }
-
-            // Validação da Matrícula
-            if (!this.matricula || !/^\d+$/.test(this.matricula) || this.matricula.length < 6) {
-                errors.push("A matrícula deve conter pelo menos 6 dígitos numéricos.");
-            }
-
-            // Validação da Senha
-            const passwordPattern = /^[A-Za-z\d]{5,20}$/;
-            if (!this.password || !passwordPattern.test(this.password)) {
-                errors.push("A senha deve ter entre 5 e 20 caracteres e conter apenas letras e números.");
-            }
-
-            // Validação da Confirmação de Senha
-            if (this.password !== this.confirmPassword) {
-                errors.push("As senhas não correspondem.");
-            }
-
-            // Verifica se existem erros
-            if (errors.length > 0) {
-                console.error("Erros de validação:", errors);
-                alert(errors.join("\n"));
-                return;
-            }
-            debugger;
-            // fazer o getall de todos os IDs de usuario para fazer o controle e enviar o novo ID no post
-            const ids = await usuarioStore.getAllIdsUsuario();
-
-            // Encontra o maior ID e adiciona 1 para obter o novo ID
-            const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
-
-            var json = {
-                //"idusuario": 1,
-                "usuario": this.usuario,
-                "nome": this.nome,
-                "matricula": this.matricula,
-                "email": this.email,
-                "senha": this.senha,
-            }
-
-            // chamar store
-            //  usuarioStore.postCadastroUsuario(json);
-
         },
-
     },
+
 };
 </script>
 

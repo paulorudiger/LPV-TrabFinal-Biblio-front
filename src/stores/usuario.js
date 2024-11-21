@@ -8,7 +8,6 @@ export const useUsuarioStore = defineStore("usuario", {
     idusuarioLogado: null, // ID do usuário logado
     // TODO: ajustar ehProfessor
     ehProfessor: true,
-    avatarCaminho: "assets/images/not-logged-in-1-64.png", // Caminho padrão do avatar
   }),
   actions: {
     async carregarDadosUsuario() {
@@ -16,8 +15,6 @@ export const useUsuarioStore = defineStore("usuario", {
         if (this.idusuarioLogado) {
           const dados = await Usuario.getDadosUsuario(this.idusuarioLogado);
           this.usuario = dados;
-          this.avatarCaminho =
-            dados.avatarCaminho || "assets/images/not-logged-in-1-64.png";
           console.log("Dados do usuário carregados:", this.usuario);
         } else {
           console.error("ID do usuário logado não encontrado.");
@@ -46,7 +43,6 @@ export const useUsuarioStore = defineStore("usuario", {
       console.log("Usuário deslogado");
       this.usuarioLogado = false;
       this.idusuarioLogado = null;
-      this.avatarCaminho = "assets/images/not-logged-in-1-64.png";
       this.usuario = [];
       this.$router.push("/login");
     },
@@ -77,7 +73,6 @@ export const useUsuarioStore = defineStore("usuario", {
       this.usuario = {};
       this.usuarioLogado = false;
       this.idusuarioLogado = null;
-      this.avatarCaminho = "assets/images/not-logged-in-1-64.png";
     } catch (erro) {
       console.error("Erro ao excluir o usuário logado:", erro);
       throw erro;
