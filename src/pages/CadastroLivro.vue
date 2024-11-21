@@ -1,10 +1,17 @@
-<!-- TODO: testar -->
 <template>
     <q-page class="flex flex-center">
         <div class="cadastro-container">
             <h3 class="text-center q-mb-md">Cadastrar Livro</h3>
             <q-form @submit.prevent="cadastrarLivro" class="form-container">
-                <!-- Upload da Capa -->
+                <!-- Campos do formulário -->
+                <q-input filled v-model="form.titulo" label="Título do Livro" required class="q-mb-sm" />
+                <q-input filled v-model="form.autor" label="Autor" required class="q-mb-sm" />
+                <q-input filled v-model="form.genero" label="Gênero" required class="q-mb-sm" />
+                <q-input filled type="number" v-model="form.ano" label="Ano de Publicação" required class="q-mb-sm" />
+                <q-input filled type="textarea" v-model="form.descricao" label="Descrição" rows="4" required
+                    class="q-mb-sm" />
+
+                <!-- Upload da capa -->
                 <div class="upload-section">
                     <q-uploader label="Carregar capa do livro" v-model="capa" accept=".png, .jpg, .jpeg"
                         class="capa-uploader" flat bordered hide-upload-button>
@@ -14,18 +21,8 @@
                             </div>
                         </template>
                     </q-uploader>
-                </div>
 
-                <!-- Campos do formulário -->
-                <q-input filled v-model="form.nome" label="Nome do Livro" required class="q-mb-sm" />
-                <q-input filled v-model="form.codigo" label="Código" required class="q-mb-sm" />
-                <q-input filled v-model="form.genero" label="Gênero" required class="q-mb-sm" />
-                <q-input filled v-model="form.classificacaoEtaria" label="Classificação Etária" required
-                    class="q-mb-sm" />
-                <q-input filled v-model="form.editora" label="Editora" required class="q-mb-sm" />
-                <q-input filled v-model="form.autor" label="Autor" required class="q-mb-sm" />
-                <q-input filled type="textarea" v-model="form.descricao" label="Descrição" rows="4" required
-                    class="q-mb-sm" />
+                </div>
 
                 <!-- Botão de cadastrar -->
                 <q-btn type="submit" label="Cadastrar" color="purple" rounded class="q-mt-md full-width" />
@@ -44,36 +41,52 @@ const router = useRouter();
 
 // Dados do formulário
 const form = ref({
-    nome: "",
-    codigo: "",
-    genero: "",
-    classificacaoEtaria: "",
-    editora: "",
+    id: null, // ID gerado automaticamente
+    titulo: "",
     autor: "",
+    genero: "",
+    ano: "",
     descricao: "",
 });
 
 // Estado do upload da capa
 const capa = ref([]);
 
+// Função para obter todos os IDs dos livros existentes
+const getAllIdsLivro = async () => {
+    try {
+        const response = await api.get("/tbLivro");
+        return response.data.map((livro) => livro.id);
+    } catch (erro) {
+        console.error("Erro ao obter IDs dos livros:", erro);
+        return [];
+    }
+};
+
 // Função para cadastrar livro
 const cadastrarLivro = async () => {
-    if (capa.value.length === 0) {
-        Dialog.create({
-            title: "Erro",
-            message: "Por favor, carregue a capa do livro.",
-            ok: { label: "Ok", color: "red" },
-        });
-        return;
-    }
+    /*  if (capa.value.length === 0) {
+         Dialog.create({
+             title: "Erro",
+             message: "Por favor, carregue a capa do livro.",
+             ok: { label: "Ok", color: "red" },
+         });
+         return;
+     } */
 
     try {
+        // Controle de ID
+        const ids = await getAllIdsLivro();
+        const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
+        form.value.id = newId;
+
         const dadosLivro = {
             ...form.value,
-            capa: capa.value[0].name, // Simulação de upload
+            disponivel: true, // Sempre definido como true
+            // caminhoImagem: `src/assets/images/tbLivro/${capa.value[0].name}`, // Simulação de upload
         };
 
-        await api.post("/tbLivro", dadosLivro); // Adicione o livro no JSON Server
+        await api.post("/tbLivro", dadosLivro); // Adiciona o livro no JSON Server
         Dialog.create({
             title: "Sucesso",
             message: "Livro cadastrado com sucesso!",
