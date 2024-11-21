@@ -9,18 +9,20 @@
 
         <!-- Centraliza o input -->
         <q-toolbar-title v-if="usuarioStore.usuarioLogado">
-          <q-input rounded outlined label-color="black" color="black" dark bg-color="light-grey" filled v-model="text"
-            label="Buscar livros...">
+          <!-- TODO: corrigir pesquisa livros -->
+          <q-input rounded outlined label-color="black" color="black" dark bg-color="light-grey" filled
+            v-model="searchQuery" @keyup.enter="searchBooks" label="Buscar livros...">
             <template v-slot:prepend>
-              <q-icon name="search"></q-icon>
+              <q-icon name="search" @click="searchBooks" />
             </template>
           </q-input>
+
         </q-toolbar-title>
 
         <!-- Alinha o avatar à direita -->
         <q-avatar size="60px" v-if="usuarioStore.usuarioLogado">
           <!-- Carrega a imagem do avatar via store -->
-          <img :src="usuarioStore.avatarCaminho" />
+          <img src="src/assets/images/not-logged-in-1-64.png" />
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
@@ -35,7 +37,7 @@
                 <q-item-section>Cadastrar Livro</q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable v-close-popup>
+              <q-item clickable v-close-popup @click="navigateToDashboard()">
                 <q-item-section>Dashboard</q-item-section>
               </q-item>
               <q-separator />
@@ -60,10 +62,18 @@
 <script setup>
 import { useUsuarioStore } from "src/stores/usuario";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 // Criar instância da store
 const usuarioStore = useUsuarioStore();
 const router = useRouter();
+const searchQuery = ref("");
+
+const searchBooks = () => {
+  if (searchQuery.value.trim()) {
+    router.push({ path: "/resultados", query: { query: searchQuery.value } });
+  }
+};
 
 // Funções de navegação
 function logout() {
@@ -88,7 +98,10 @@ defineOptions({
     },
     navigateToManterReserva() {
       this.$router.push("/manterreserva");
-    }
+    },
+    navigateToDashboard() {
+      this.$router.push("/dashboard");
+    },
   },
 });
 </script>

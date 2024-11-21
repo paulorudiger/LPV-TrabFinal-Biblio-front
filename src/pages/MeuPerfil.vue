@@ -3,7 +3,7 @@
         <div class="perfil-container">
             <!-- Avatar do usuário -->
             <q-avatar size="120px" class="q-mb-md">
-                <img :src="usuarioStore.avatarCaminho" alt="Avatar do usuário" />
+                <img src="src/assets/images/not-logged-in-1-64.png" alt="Avatar do usuário" />
             </q-avatar>
             <h3 class="text-center q-mb-md">Meus dados</h3>
             <!-- Formulário de edição de perfil -->
@@ -63,7 +63,6 @@ const atualizarDados = () => {
         return;
     }
 
-    console.log("Dados atualizados:", form.value);
     alert("Dados atualizados com sucesso!");
 };
 
@@ -97,7 +96,6 @@ const excluirPerfil = async () => {
     try {
         await usuarioStore.excluirUsuarioLogado(); // Chama a ação da store
         router.push("/login"); // Redireciona para a página de login
-        console.log("Perfil excluído e redirecionado para login.");
     } catch (erro) {
         console.error("Erro ao excluir o perfil:", erro.message);
         alert("Ocorreu um erro ao excluir o perfil. Tente novamente.");

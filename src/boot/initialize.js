@@ -5,7 +5,6 @@ export default async ({ store, router }) => {
   router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
     const usuarioStore = useUsuarioStore(store).usuarioLogado; // usuariologado
-    console.log(usuarioStore);
     if (requiresAuth && !usuarioStore) {
       next("/login");
     } else if (to.path === "/login" && !!usuarioStore) {

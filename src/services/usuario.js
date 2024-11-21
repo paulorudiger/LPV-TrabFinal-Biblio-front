@@ -26,7 +26,6 @@ export default class Usuario {
       api
         .get("/table1", data)
         .then((response) => {
-          console.log(response.data);
           res(response.data);
         })
         .catch((err) => {
@@ -36,22 +35,6 @@ export default class Usuario {
     });
   }
 
-  static async getUsuarioFoto(id) {
-    // debugger;
-    // TODO: resolver foto
-    return new Promise((res, rej) => {
-      api
-        .get(`/tbUsuario/${id}`) // Busca o usuário pelo ID
-        .then((response) => {
-          console.log("Foto do Usuário:", response.data.avatarCaminho);
-          res(response.data.avatarCaminho); // Retorna o caminho do avatar
-        })
-        .catch((err) => {
-          console.error(`Erro ao buscar foto do usuário com ID ${id}:`, err);
-          rej(err.response);
-        });
-    });
-  }
   static async postCadastroUsuario(data) {
     return new Promise((res, rej) => {
       api

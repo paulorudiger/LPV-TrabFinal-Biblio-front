@@ -23,6 +23,19 @@ const routes = [
         path: "/manterreserva",
         component: () => import("pages/ManterReserva.vue"),
       },
+      {
+        path: "/detalhes-livro/:id",
+        component: () => import("pages/DetalhesLivro.vue"),
+      },
+      {
+        path: "/dashboard",
+        component: () => import("pages/DashboardBiblio.vue"),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "/resultados", // Nova rota para os resultados da pesquisa
+        component: () => import("pages/ResultadosPesquisa.vue"),
+      },
     ],
   },
   // {

@@ -6,7 +6,7 @@ export default class Livro {
       api
         .get("/tbLivro", { params: data }) // Passa os dados como query params
         .then((response) => {
-          console.log("Resposta dos Livros:", response.data);
+          //  console.log("Resposta dos Livros:", response.data);
           res(response.data);
         })
         .catch((err) => {
@@ -25,8 +25,10 @@ export default class Livro {
           res(response.data);
         })
         .catch((err) => {
+          // debugger;
+
           console.error("Erro ao buscar livro por ID:", err);
-          rej(err.response);
+          rej(err.response || { message: "Erro ao buscar livro" });
         });
     });
   }

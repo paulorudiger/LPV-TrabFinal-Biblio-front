@@ -1,4 +1,4 @@
-<!-- TODO: testar -->
+<!-- TODO: testar/fazer -->
 <template>
     <q-page class="flex flex-center">
         <div class="reservas-container">

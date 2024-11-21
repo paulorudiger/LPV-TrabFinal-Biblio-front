@@ -44,14 +44,12 @@ const usuarioStore = useUsuarioStore();
 
 // Função para simular login via redes sociais
 const simularLogin = (redeSocial) => {
-    console.log(`Simulando login via ${redeSocial}`);
     const usuarioSimulado = { usuario: "paulorudiger", senha: "1" };
 
     // Simula a autenticação com as credenciais
     usuarioStore
         .login(usuarioSimulado)
         .then(() => {
-            console.log(`Login via ${redeSocial} bem-sucedido`);
             router.push("/"); // Redireciona para a página inicial
         })
         .catch((erro) => {
@@ -61,7 +59,6 @@ const simularLogin = (redeSocial) => {
 // Função para envio do formulário de login
 const submitForm = async () => {
     try {
-        console.log("Tentativa de login:", username.value, password.value);
         // Autentica o usuário
         await usuarioStore.login({ usuario: username.value, senha: password.value });
         // Redireciona para a página inicial após login bem-sucedido
