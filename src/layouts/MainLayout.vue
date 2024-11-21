@@ -86,7 +86,7 @@ defineOptions({
       this.$router.push("/meuperfil");
     },
     navigateToReservas() {
-      this.$router.push("/paginainicial"); // TODO: mudar para ir para reservas
+      this.$router.push("/manterreservas"); // TODO: mudar para ir para reservas
     },
     navigateToCadLivro() {
       this.$router.push("/cadlivro"); // TODO: mudar para ir para reservas

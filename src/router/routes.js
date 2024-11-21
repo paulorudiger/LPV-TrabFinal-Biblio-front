@@ -20,7 +20,7 @@ const routes = [
       { path: "/meuperfil", component: () => import("pages/MeuPerfil.vue") },
       { path: "/cadlivro", component: () => import("pages/CadastroLivro.vue") },
       {
-        path: "/manterreserva",
+        path: "/manterreservas",
         component: () => import("pages/ManterReserva.vue"),
       },
       {

@@ -1,4 +1,3 @@
-<!-- TODO: testar/fazer -->
 <template>
     <q-page class="flex flex-center">
         <div class="reservas-container">
@@ -24,22 +23,13 @@
                         <div class="reserva-detalhes">
                             <!-- Imagem do livro -->
                             <q-img :src="reserva.capa" class="reserva-capa" />
-
                             <!-- Informações da reserva -->
                             <div class="reserva-informacoes">
                                 <h5>{{ reserva.titulo }}</h5>
-                                <p>
-                                    Matrícula do aluno: {{ reserva.matricula }}
-                                </p>
-                                <p>
-                                    Data de reserva: {{ reserva.dataReserva }}
-                                </p>
-                                <p>
-                                    Data de devolução:
-                                    {{ reserva.dataDevolucao || "Pendente" }}
-                                </p>
+                                <p>Matrícula do aluno: {{ reserva.matricula }}</p>
+                                <p>Data de reserva: {{ reserva.dataReserva }}</p>
+                                <p>Data de devolução: {{ reserva.dataDevolucao || "Pendente" }}</p>
                             </div>
-
                             <!-- Indicador de status -->
                             <q-chip color="green" v-if="reserva.status === 'Devolvido'" class="status-chip">
                                 Devolvido
@@ -59,18 +49,12 @@
                 <q-card-section>
                     <h5 class="text-center">Nova Reserva</h5>
                 </q-card-section>
-
                 <q-card-section>
                     <q-form @submit.prevent="cadastrarReserva">
                         <q-input outlined v-model="novaReserva.matricula" label="Matrícula" dense class="q-mb-sm" />
-                        <q-input outlined v-model="novaReserva.nome" label="Nome do aluno" dense class="q-mb-sm" />
-                        <q-input outlined v-model="novaReserva.codigoLivro" label="Código do livro" dense
-                            class="q-mb-sm" />
-                        <q-input outlined v-model="novaReserva.livro" label="Livro" dense class="q-mb-sm" />
+                        <q-input outlined v-model="novaReserva.idLivro" label="ID do livro" dense class="q-mb-sm" />
                         <q-input outlined v-model="novaReserva.dataReserva" label="Data da reserva" type="date" dense
                             class="q-mb-sm" />
-
-                        <!-- Botão para confirmar reserva -->
                         <q-btn label="Reservar" color="purple" rounded type="submit" class="full-width" />
                     </q-form>
                 </q-card-section>
@@ -84,18 +68,15 @@ import { ref, computed, onMounted } from "vue";
 import { Dialog } from "quasar";
 import { api } from "../boot/axios";
 
-// Estado global
-const matricula = ref(""); // Matrícula para busca
-const reservas = ref([]); // Lista de reservas
-const mostrarDevolvidos = ref(false); // Filtro de devolvidos
-const janelaAberta = ref(false); // Controle da janela de cadastro
+// Estados
+const matricula = ref("");
+const reservas = ref([]);
+const mostrarDevolvidos = ref(false);
+const janelaAberta = ref(false);
 
-// Estado da nova reserva
 const novaReserva = ref({
     matricula: "",
-    nome: "",
-    codigoLivro: "",
-    livro: "",
+    idLivro: "",
     dataReserva: "",
 });
 
@@ -112,9 +93,21 @@ const reservasFiltradas = computed(() => {
 // Função para carregar reservas
 const carregarReservas = async () => {
     try {
-        const response = await api.get("/tbReservas");
-        reservas.value = response.data;
-        console.log("Reservas carregadas:", reservas.value);
+        const responseReservas = await api.get("/tbReservas");
+        const responseLivros = await api.get("/tbLivro");
+
+        const livros = responseLivros.data;
+        //debugger;
+        //console.log(responseLivros);
+        reservas.value = responseReservas.data.map((reserva) => {
+            const livro = livros.find((livro) => Number(livro.id) === Number(reserva.idLivro));
+            return {
+                ...reserva,
+                titulo: livro?.titulo || "Livro não encontrado",
+                capa: livro?.caminhoImagem || "src/assets/images/tbLivro/capa-generica.jpeg",
+            };
+        });
+
     } catch (erro) {
         console.error("Erro ao carregar reservas:", erro);
         Dialog.create({
@@ -140,7 +133,7 @@ const cadastrarReserva = async () => {
             ok: { label: "Ok", color: "green" },
         });
         janelaAberta.value = false;
-        carregarReservas(); // Recarrega as reservas
+        carregarReservas();
     } catch (erro) {
         console.error("Erro ao cadastrar reserva:", erro);
         Dialog.create({
