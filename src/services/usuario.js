@@ -74,7 +74,7 @@ export default class Usuario {
           res(response.data); // Retorna os dados completos do usuário
         })
         .catch((err) => {
-          console.error(`Erro ao buscar dados do usuário com ID ${id}:`, err);
+          //  console.error(`Erro ao buscar dados do usuário com ID ${id}:`, err);
           rej(err.response || { message: "Erro no servidor" });
         });
     });

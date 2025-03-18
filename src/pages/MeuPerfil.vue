@@ -30,6 +30,8 @@ import { ref, onMounted } from "vue";
 import { useUsuarioStore } from "../stores/usuario";
 import { useRouter } from "vue-router";
 import { Dialog } from "quasar";
+import { api } from "../boot/axios";
+
 
 // Store e roteador
 const usuarioStore = useUsuarioStore();
@@ -114,16 +116,32 @@ const confirmarExclusao = () => {
 };
 
 // Função para excluir o perfil
-// TODO: continuar função de exclusao de perfil
 const excluirPerfil = async () => {
     try {
-        await usuarioStore.excluirUsuarioLogado(); // Chama a ação da store
-        router.push("/login"); // Redireciona para a página de login
+        // Obtém o ID do usuário logado da store
+        const idusuario = usuarioStore.idusuarioLogado;
+
+        if (!idusuario) {
+            throw new Error("ID do usuário não encontrado.");
+        }
+
+        // Faz a requisição DELETE para o JSON Server
+        await api.delete(`/tbUsuario/${idusuario}`);
+
+        // Exibe uma mensagem de sucesso
+        alert("Perfil excluído com sucesso!");
+
+        // Redefine o estado da store após a exclusão
+        usuarioStore.sairsistema();
+
+        // Redireciona para a página de login
+        router.push("/login");
     } catch (erro) {
         console.error("Erro ao excluir o perfil:", erro.message);
         alert("Ocorreu um erro ao excluir o perfil. Tente novamente.");
     }
 };
+
 </script>
 
 <style scoped>

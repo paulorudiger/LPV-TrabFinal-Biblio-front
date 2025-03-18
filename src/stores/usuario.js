@@ -6,7 +6,6 @@ export const useUsuarioStore = defineStore("usuario", {
     usuario: [],
     usuarioLogado: false,
     idusuarioLogado: null, // ID do usuário logado
-    // TODO: ajustar ehProfessor
     ehProfessor: true,
   }),
   actions: {
@@ -57,24 +56,5 @@ export const useUsuarioStore = defineStore("usuario", {
         return [];
       }
     },
-  },
-  async excluirUsuarioLogado() {
-    try {
-      if (!this.idusuarioLogado) {
-        throw new Error("ID do usuário logado não encontrado.");
-      }
-
-      // Chama o serviço para excluir o usuário
-      await Usuario.excluirUsuario(this.idusuarioLogado);
-      console.log("Usuário excluído com sucesso.");
-
-      // Limpa o estado após a exclusão
-      this.usuario = {};
-      this.usuarioLogado = false;
-      this.idusuarioLogado = null;
-    } catch (erro) {
-      console.error("Erro ao excluir o usuário logado:", erro);
-      throw erro;
-    }
   },
 });

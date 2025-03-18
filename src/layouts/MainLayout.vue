@@ -9,7 +9,6 @@
 
         <!-- Centraliza o input -->
         <q-toolbar-title v-if="usuarioStore.usuarioLogado">
-          <!-- TODO: corrigir pesquisa livros -->
           <q-input rounded outlined label-color="black" color="black" dark bg-color="light-grey" filled
             v-model="searchQuery" @keyup.enter="pesquisarLivros" label="Buscar livros...">
 
